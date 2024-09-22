@@ -1,2 +1,0 @@
-# SOSGame
-SOS Game
