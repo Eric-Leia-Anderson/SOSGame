@@ -329,6 +329,27 @@ public class SOSGUI extends JFrame {
 			return true;
 		}
 	}
+	
+	/**
+	 * Returns top panel.
+	 * */
+	public TopBar getTopPanel() {
+		return topPanel;
+	}
+	
+	/**
+	 * Returns right panel.
+	 * */
+	public RightBar getRightPanel() {
+		return rightPanel;
+	}
+	
+	/**
+	 * Returns left panel.
+	 * */
+	public LeftBar getLeftPanel() {
+		return leftPanel;
+	}
 
 	/**
 	 * Runs the program.

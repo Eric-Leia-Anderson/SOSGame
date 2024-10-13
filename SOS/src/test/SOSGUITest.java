@@ -48,40 +48,37 @@ public class SOSGUITest {
 
     @Test
     public void testValidSize() {
-    	topPanel.getNum().setText("5");
+    	sosGui.getTopPanel().getNum().setText("5");
         assertTrue(sosGui.validateBoardSize(), "Should return true for valid size 5");
     }
 
     @Test
     public void testSizeTooSmall() {
-        topPanel.getNum().setText("2");
+    	sosGui.getTopPanel().getNum().setText("2");
         assertFalse(sosGui.validateBoardSize(), "Should return false for size less than 3");
     }
 
     @Test
     public void testSizeTooLarge() {
-    	topPanel.getNum().setText("11");
+    	sosGui.getTopPanel().getNum().setText("11");
         assertFalse(sosGui.validateBoardSize(), "Should return false for size greater than 10");
     }
 
     @Test
     public void testNonNumericInput() {
-    	topPanel.getNum().setText("abc");
+    	sosGui.getTopPanel().getNum().setText("abc");
         assertFalse(sosGui.validateBoardSize(), "Should return false for non-numeric input");
     }
 
     @Test
     public void testEmptyInput() {
-    	topPanel.getNum().setText("");
+    	sosGui.getTopPanel().getNum().setText("");
         assertFalse(sosGui.validateBoardSize(), "Should return false for empty input");
     }
 
     @Test
-    public void testInputTooLong() {
-    	topPanel.getNum().setText("1234"); // This is valid
-        assertTrue(sosGui.validateBoardSize(), "Should return true for valid size 1234");
-        
-        topPanel.getNum().setText("12345"); // This is too long
+    public void testInputTooLong() {        
+        sosGui.getTopPanel().getNum().setText("12345"); // This is too long
         assertFalse(sosGui.validateBoardSize(), "Should return false for input longer than 4 characters");
     }
 }
