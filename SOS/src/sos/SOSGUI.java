@@ -184,9 +184,7 @@ public class SOSGUI extends JFrame {
 		if (topPanel.getSimple().isSelected()) {
 			if (game.getGameRules() == GameRules.GENERAL) {
 				game.updateGameRules(GameRules.SIMPLE);
-				//gameType = GameType.SIMPLE;
 				game = new SimpleGameRules();
-				//game.updateGameRules(GameRules.SIMPLE);
 			}
 		}
 		
@@ -194,7 +192,6 @@ public class SOSGUI extends JFrame {
 			if (game.getGameRules() == GameRules.SIMPLE) {
 				game.updateGameRules(GameRules.GENERAL);
 				game = new GeneralGameRules();
-				//game.updateGameRules(GameRules.GENERAL);
 			}
 		}
 	}
