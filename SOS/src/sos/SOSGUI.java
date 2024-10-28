@@ -2,6 +2,7 @@ package sos;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Line2D;
 
 import javax.swing.*;
 
@@ -163,11 +164,13 @@ public class SOSGUI extends JFrame {
 				}
 				gameBoardCanvas.paintComponent(getGraphics());
 				game.resetGame();
+				changeGameMode();
+				checkPoints();
 				leftPanel.S.setSelected(true);
 				rightPanel.S.setSelected(true);
 				gameBoardCanvas.setPreferredSize(new Dimension(CELL_SIZE * game.getTotalRows(), CELL_SIZE * game.getTotalColumns()));
 				repaint();
-				changeGameMode();
+				
 				
 				
 			}
@@ -179,16 +182,19 @@ public class SOSGUI extends JFrame {
 	 * */
 	public void changeGameMode() {
 		if (topPanel.getSimple().isSelected()) {
-			if (gameType == GameType.GENERAL) {
-				gameType = GameType.SIMPLE;
+			if (game.getGameRules() == GameRules.GENERAL) {
 				game.updateGameRules(GameRules.SIMPLE);
+				//gameType = GameType.SIMPLE;
+				game = new SimpleGameRules();
+				//game.updateGameRules(GameRules.SIMPLE);
 			}
 		}
 		
 		else {
-			if (gameType == GameType.SIMPLE) {
-				gameType = GameType.GENERAL;
+			if (game.getGameRules() == GameRules.SIMPLE) {
 				game.updateGameRules(GameRules.GENERAL);
+				game = new GeneralGameRules();
+				//game.updateGameRules(GameRules.GENERAL);
 			}
 		}
 	}
@@ -206,8 +212,10 @@ public class SOSGUI extends JFrame {
 						int rowSelected = e.getY() / CELL_SIZE;
 						int colSelected = e.getX() / CELL_SIZE;
 						game.makeMove(rowSelected, colSelected);
+						checkPoints();
 					} else {
 						game.resetGame();
+						checkPoints();
 					}
 					repaint();
 				}
@@ -264,6 +272,16 @@ public class SOSGUI extends JFrame {
 						g2d.drawOval(x1, y1, SYMBOL_SIZE, SYMBOL_SIZE);
 					}
 				}
+			}
+			//paints lines on found SOS's on board 
+			for(FoundSOS fs : game.getFoundSOS()) {
+				float x1 = (float) ((fs.getLast().x+0.25) * CELL_SIZE + CELL_PADDING);
+				float y1 = (float) ((fs.getLast().y+0.5) * CELL_SIZE + CELL_PADDING);
+				float x2 = (float) ((fs.getFirst().x+0.25) * CELL_SIZE + CELL_PADDING);
+				float y2 = (float) ((fs.getFirst().y+0.5) * CELL_SIZE + CELL_PADDING);
+				g2d.setColor(fs.getLineColor());
+				Line2D lin = new Line2D.Float(y1, x1, y2, x2);
+		        g2d.draw(lin);
 			}
 		}
 
@@ -350,6 +368,14 @@ public class SOSGUI extends JFrame {
 	public LeftBar getLeftPanel() {
 		return leftPanel;
 	}
+	
+	/**
+	 * Changes panels to have current player points.
+	 * */
+	public void checkPoints() {
+		leftPanel.getPlayerOneActualPoints().setText(String.valueOf(game.getPlayerOne().getPlayerPoints()));
+		rightPanel.getPlayerTwoActualPoints().setText(String.valueOf(game.getPlayerTwo().getPlayerPoints()));
+	}
 
 	/**
 	 * Runs the program.
@@ -357,7 +383,7 @@ public class SOSGUI extends JFrame {
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				new SOSGUI(new SOSGame());
+				new SOSGUI(new SimpleGameRules());
 			}
 		});
 	}

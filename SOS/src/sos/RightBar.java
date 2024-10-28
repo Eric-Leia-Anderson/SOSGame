@@ -10,6 +10,8 @@ public class RightBar extends JPanel{
 	public ButtonGroup radio;
 	public JRadioButton S;
 	public JRadioButton O;
+	public JLabel PlayerTwoPoints;
+	public JLabel ActualPoints;
 	
 	/**
 	 * Sets up and initializes player 2's panel.
@@ -17,6 +19,10 @@ public class RightBar extends JPanel{
 	public RightBar() {
 		PlayerTwoLabel = new JLabel("Player 2");
 		this.add(PlayerTwoLabel);
+		PlayerTwoPoints = new JLabel("Points");
+		this.add(PlayerTwoPoints);
+		ActualPoints = new JLabel("0");
+		this.add(ActualPoints);
 		setVisible(true);
 		
 		radio = new ButtonGroup();
@@ -26,6 +32,8 @@ public class RightBar extends JPanel{
 		radio.add(O);
 		this.add(S);
 		this.add(O);
+		
+		
 	}
 	
 	/**
@@ -82,5 +90,33 @@ public class RightBar extends JPanel{
 	 * */
 	public void setO(JRadioButton o) {
 		O = o;
+	}
+	
+	/**
+	 * Returns player 2's point label.
+	 * */
+	public JLabel getPlayerTwoPoints() {
+		return PlayerTwoPoints;
+	}
+
+	/**
+	 * Sets player 2's point label.
+	 * */
+	public void setPlayerTwoPoints(JLabel playerTwoPoints) {
+		PlayerTwoPoints = playerTwoPoints;
+	}
+	
+	/**
+	 * Returns player 2's actual point label.
+	 * */
+	public JLabel getPlayerTwoActualPoints() {
+		return ActualPoints;
+	}
+
+	/**
+	 * Sets player 2's actual point label.
+	 * */
+	public void setPlayerTwoActualPoints(JLabel actualPoints) {
+		ActualPoints = actualPoints;
 	}
 }

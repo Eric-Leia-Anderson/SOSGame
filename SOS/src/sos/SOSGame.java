@@ -1,9 +1,14 @@
 package sos;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import sos.SOSGame.Cell;
 
 public class SOSGame {
 	protected static int TOTALROWS = 4;
@@ -12,11 +17,16 @@ public class SOSGame {
 	public enum Cell {
 		EMPTY, S, O
 	}
+	public enum Colors {
+		RED, BLUE, NONE
+	}
 	protected Cell[][] grid;
 	protected char turn;
 	
 	protected Player playerOne;
 	protected Player playerTwo;
+	
+	protected List<FoundSOS> foundSOSs;
 	
 	public enum GameRules {
 		SIMPLE, GENERAL
@@ -39,8 +49,8 @@ public class SOSGame {
 	}
 
 	/**
-	 * Initializes cell array, sets default game state to playing, sets default game rules to simple,
-	 * creates 2 players with default colors, letter, and turns.
+	 * Initializes cell array, sets default game state to playing,
+	 * creates 2 players with default colors, letter, turns, and points.
 	 * */
 	private void initGame() {
 		for (int row = 0; row < TOTALROWS; ++row) {
@@ -49,9 +59,9 @@ public class SOSGame {
 			}
 		}
 		currentGameState = GameState.PLAYING;
-		currentGameRules = GameRules.SIMPLE;
-		playerOne = new Player(Color.RED, "S", 1);
-		playerTwo = new Player(Color.BLUE, "S", 2);
+		foundSOSs = new ArrayList<FoundSOS>();
+		playerOne = new Player(Color.RED, "S", 1, 0);
+		playerTwo = new Player(Color.BLUE, "S", 2, 0);
 		playerOne.setPlayerLetter("S");
 		playerTwo.setPlayerLetter("S");
 		turn = '1';
@@ -63,6 +73,39 @@ public class SOSGame {
 	public void resetGame() {
 		initGame();
 		
+	}
+	
+	/**
+	 * Returns the list of found SOS's.
+	 * */
+	public List<FoundSOS> getFoundSOS() {
+		return foundSOSs;
+	}
+	
+	/**
+	 * Returns size of found SOS list.
+	 * */
+	public int getFoundSOSSize() {
+		return foundSOSs.size();
+	}
+	
+	/**
+	 * Checks if the the 3 points are already in the found SOS list.
+	 * */
+	public boolean checkSOSList(Point a, Point b, Point c) {
+		if(foundSOSs.size() == 0) {
+			return false;
+		}
+		else {
+			for(FoundSOS fs : foundSOSs) {
+				List<Point> points = fs.getCoordinates();
+				if(points.contains(a) && points.contains(b) && points.contains(c)) {
+					return true;
+				}
+				
+			}
+			return false;
+		}
 	}
 	
 	/**
@@ -160,45 +203,28 @@ public class SOSGame {
 	 * 
 	 */
 	public void makeMove(int row, int column) {
-		if (row >= 0 && row < TOTALROWS && column >= 0 && column < TOTALCOLUMNS && grid[row][column] == Cell.EMPTY) {
-			Cell token;
-			if (turn == '1') {
-				token = playerOne.getPlayerLetter().equals(Cell.S.name()) ? Cell.S : Cell.O;
-			}
-			else {
-				token = playerTwo.getPlayerLetter().equals(Cell.S.name()) ? Cell.S : Cell.O;
-			}
-			grid[row][column] = token;
-			updateGameState(turn, row, column);
-			turn = (turn == '1') ? '2' : '1';
-		} else if(grid[row][column] == Cell.O || grid[row][column] == Cell.S) {
-			String message = "Someone already made a move here, try again. ";
-			JOptionPane.showMessageDialog(new JFrame(), message, "Dialog",
-			        JOptionPane.ERROR_MESSAGE);
-		}
+		//empty
 	}
 	
 	/**
-	 * Updates game state. NOT IMPLEMENTED.
+	 * Updates game state. 
 	 * */
-	private void updateGameState(char turn, int row, int column) {
-		//need to implement
+	protected void updateGameState(GameState state) {
+		currentGameState = state;
 	}
-
+	
 	/**
-	 * Checks if draw. NOT IMPLEMENTED.
+	 * Checks if any cells are empty. 
 	 * */
-	private boolean isDraw() {
-		//need to implement
+	protected boolean isBoardFull() {
+		for (int row = 0; row < TOTALROWS; ++row) {
+			for (int col = 0; col < TOTALCOLUMNS; ++col) {
+				if(grid[row][col] == Cell.EMPTY) {
+					return false;
+				}
+			}
+		}
 		return true;
-	}
-
-	/**
-	 * Checks if someone won. NOT IMPLEMENTED.
-	 * */
-	private boolean hasWon(char turn, int row, int column) {
-		//need to implement
-		return false;
 	}
 
 	/**
@@ -220,5 +246,61 @@ public class SOSGame {
 	 * */
 	public GameRules getGameRules() {
 		return currentGameRules;
+	}
+	
+	/**
+	 * Finds any SOS's on board, checks if it was already found, and returns the list. 
+	 * */
+	public List<FoundSOS> findSOS(Cell[][] grid, int row, int col, Cell[] tokens) {
+		int m = grid.length;
+	    int n = grid[0].length;
+	    List<Point> points = new ArrayList<Point>();
+	    List<FoundSOS> stuff = new ArrayList<FoundSOS>();
+	    FoundSOS found;
+	    Point p;
+	    if (grid[row][col] != tokens[0]) {
+	    	return stuff;
+	    }
+	    else {
+	    	p = new Point(row,col);
+	    	points.add(p);
+	    }
+    	int len = tokens.length;
+        int[] x = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] y = { -1, 0, 1, -1, 1, -1, 0, 1 };
+
+        for (int dir = 0; dir < 8; dir++) {
+            int k;
+            int currX = row + x[dir];
+            int currY = col + y[dir];
+
+            for (k = 1; k < len; k++) {
+                if (currX >= m || currX < 0 || currY >= n || currY < 0) {
+                    break;
+                }
+                if (grid[currX][currY] != tokens[k]) {
+                    break;
+                }
+                p = new Point(currX,currY);
+            	points.add(p);
+                currX += x[dir];
+                currY += y[dir];
+            }
+            if (k == len) {
+            	boolean check = checkSOSList(points.get(0), points.get(1), points.get(2));
+            	if(!check) {
+            		found = new FoundSOS();
+                	for (Point pt : points) {
+                		found.addCoordinate(pt);
+                	}
+                	stuff.add(found);
+            	}
+            	points.remove(2);
+            	points.remove(1);
+            }
+            currX -= x[dir];
+            currY -= y[dir];
+        }
+        return stuff;
 	}
 }

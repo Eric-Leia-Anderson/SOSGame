@@ -10,6 +10,8 @@ public class LeftBar extends JPanel{
 	public ButtonGroup radio;
 	public JRadioButton S;
 	public JRadioButton O;
+	public JLabel PlayerOnePoints;
+	public JLabel ActualPoints;
 	
 	/**
 	 * Sets up and initializes player 1's panel.
@@ -17,6 +19,10 @@ public class LeftBar extends JPanel{
 	public LeftBar() {
 		PlayerOneLabel = new JLabel("Player 1");
 		this.add(PlayerOneLabel);
+		PlayerOnePoints = new JLabel("Points");
+		this.add(PlayerOnePoints);
+		ActualPoints = new JLabel("0");
+		this.add(ActualPoints);
 		setVisible(true);
 		radio = new ButtonGroup();
 		S = new JRadioButton("S");
@@ -25,6 +31,7 @@ public class LeftBar extends JPanel{
 		radio.add(O);
 		this.add(S);
 		this.add(O);
+		
 	}
 
 	/**
@@ -84,5 +91,31 @@ public class LeftBar extends JPanel{
 		O = o;
 	}
 	
+	/**
+	 * Returns player 1's point label.
+	 * */
+	public JLabel getPlayerOnePoints() {
+		return PlayerOnePoints;
+	}
+
+	/**
+	 * Sets player 1's point label.
+	 * */
+	public void setPlayerOnePoints(JLabel playerOnePoints) {
+		PlayerOnePoints = playerOnePoints;
+	}
 	
+	/**
+	 * Returns player 1's actual point label.
+	 * */
+	public JLabel getPlayerOneActualPoints() {
+		return ActualPoints;
+	}
+
+	/**
+	 * Sets player 1's actual point label.
+	 * */
+	public void setPlayerOneActualPoints(JLabel actualPoints) {
+		ActualPoints = actualPoints;
+	}
 }

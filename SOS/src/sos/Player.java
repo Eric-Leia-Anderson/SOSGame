@@ -7,14 +7,17 @@ public class Player {
 	private int playerTurn;
 	private Color playerColor;
 	private String playerLetter;
+	private int playerPoints;
+
 
 	/**
-	 * Sets up Player with color, letter, and turn.
+	 * Sets up Player with color, letter, turn, and points.
 	 * */
-	public Player(Color color, String letter, int turn) {
+	public Player(Color color, String letter, int turn, int points) {
 		playerColor = color;
 		playerLetter = letter;
 		playerTurn = turn;
+		playerPoints = points;
 	}
 	
 	/**
@@ -57,6 +60,20 @@ public class Player {
 	 * */
 	public void setPlayerLetter(String letter) {
 		playerLetter = letter;
+	}
+	
+	/**
+	 * Gets player points.
+	 * */
+	public int getPlayerPoints() {
+		return playerPoints;
+	}
+
+	/**
+	 * Sets player points..
+	 * */
+	public void setPlayerPoints(int playerPoints) {
+		this.playerPoints = playerPoints;
 	}
 }
 

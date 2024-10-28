@@ -9,6 +9,7 @@ import sos.TopBar;
 import sos.LeftBar;
 import sos.RightBar;
 import sos.SOSGame;
+import sos.SimpleGameRules;
 
 public class SOSGUITest {
 

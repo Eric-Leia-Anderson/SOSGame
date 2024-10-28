@@ -25,4 +25,9 @@ public class SOSGameTest {
         sosGame.updateGameRules(SOSGame.GameRules.GENERAL);
         assertEquals(SOSGame.GameRules.GENERAL, sosGame.getGameRules(), "Current rule should be GENERAL");
     }
+    
+    @Test
+    public void testNewSimpleGame() {
+    	
+    }
 }
