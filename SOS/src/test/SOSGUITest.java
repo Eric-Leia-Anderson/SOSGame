@@ -6,9 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sos.SOSGUI;
 import sos.TopBar;
+import sos.GeneralGameRules;
 import sos.LeftBar;
 import sos.RightBar;
 import sos.SOSGame;
+import sos.SOSGame.GameState;
 import sos.SimpleGameRules;
 
 public class SOSGUITest {
@@ -81,5 +83,63 @@ public class SOSGUITest {
     public void testInputTooLong() {        
         sosGui.getTopPanel().getNum().setText("12345"); // This is too long
         assertFalse(sosGui.validateBoardSize(), "Should return false for input longer than 4 characters");
+    }
+    
+    @Test
+    public void testSimpleGameWin() {
+    	sosGame = new SimpleGameRules();
+    	sosGui = new SOSGUI(sosGame);
+    	sosGame.makeMove(0, 0);//s
+    	sosGame.getPlayerTwo().setPlayerLetter("O");
+    	sosGame.makeMove(0, 0);//o
+    	sosGame.makeMove(0, 0);//s
+    	
+    	assertEquals("PLAYERONE_WON", sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
+    	
+    }
+    
+    @Test
+    public void testGeneralDraw() {
+    	sosGame = new GeneralGameRules();
+    	sosGui = new SOSGUI(sosGame);
+    	sosGame.getPlayerOne().setPlayerPoints(3);
+        sosGame.getPlayerTwo().setPlayerPoints(3);
+        
+        for (int i = 0; i < sosGame.getTotalRows(); i++) {
+            for (int j = 0; j < sosGame.getTotalColumns(); j++) {
+                sosGame.makeMove(i, j); 
+            }
+        }
+        assertEquals(GameState.DRAW, sosGame.getGameState(), "Current game state should be DRAW");
+        
+    }
+    
+    @Test
+    public void testGeneralWin() {
+    	sosGame = new GeneralGameRules();
+    	sosGui = new SOSGUI(sosGame);
+        sosGame.getPlayerTwo().setPlayerLetter("O");
+        
+        for (int i = 0; i < sosGame.getTotalRows(); i++) {
+            for (int j = 0; j < sosGame.getTotalColumns(); j++) {
+                sosGame.makeMove(i, j); 
+            }
+        }
+        assertEquals(GameState.PLAYERONE_WON, sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
+        
+    }
+    
+    @Test
+    public void testSimpleDraw() {
+    	sosGame = new SimpleGameRules();
+    	sosGui = new SOSGUI(sosGame);
+        
+        for (int i = 0; i < sosGame.getTotalRows(); i++) {
+            for (int j = 0; j < sosGame.getTotalColumns(); j++) {
+                sosGame.makeMove(i, j); 
+            }
+        }
+        assertEquals(GameState.DRAW, sosGame.getGameState(), "Current game state should be DRAW");
+        
     }
 }
