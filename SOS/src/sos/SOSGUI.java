@@ -163,7 +163,6 @@ public class SOSGUI extends JFrame {
 					
 				}
 				gameBoardCanvas.paintComponent(getGraphics());
-				game.resetGame();
 				changeGameMode();
 				checkPoints();
 				leftPanel.S.setSelected(true);
@@ -181,18 +180,16 @@ public class SOSGUI extends JFrame {
 	 * Changes game rules if new mode is selected and reset/start game is clicked.
 	 * */
 	public void changeGameMode() {
-		if (topPanel.getSimple().isSelected()) {
-			if (game.getGameRules() == GameRules.GENERAL) {
+		if (topPanel.getSimple().isSelected() && game.getGameRules() == GameRules.GENERAL) {
 				game.updateGameRules(GameRules.SIMPLE);
 				game = new SimpleGameRules();
-			}
 		}
-		
-		else {
-			if (game.getGameRules() == GameRules.SIMPLE) {
+		else if (topPanel.getGeneral().isSelected() && game.getGameRules() == GameRules.SIMPLE){
 				game.updateGameRules(GameRules.GENERAL);
 				game = new GeneralGameRules();
 			}
+		else {
+			game.resetGame();
 		}
 	}
 

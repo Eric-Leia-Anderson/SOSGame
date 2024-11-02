@@ -79,15 +79,13 @@ public class SimpleGameRules extends SOSGame{
             	if(found.size() > 0) {
             		for(FoundSOS fs : found) {
             			points = fs.getCoordinates();
-            			sosFound = new FoundSOS();
-                		for(Point pt : points) {
-                			sosFound.addCoordinate(pt);
-                		}
-                		sosFound.setLineColor(color);
-                		foundSOSs.add(sosFound);
+            			if(points.size() == 3) {
+            				fs.setLineColor(color);
+            				foundSOSs.add(fs);
+            				break;
+            			}
             		}
             	}
-            	break;
             }
         }
 	}

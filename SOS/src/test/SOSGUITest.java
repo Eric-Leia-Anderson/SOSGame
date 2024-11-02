@@ -89,12 +89,12 @@ public class SOSGUITest {
     public void testSimpleGameWin() {
     	sosGame = new SimpleGameRules();
     	sosGui = new SOSGUI(sosGame);
-    	sosGame.makeMove(0, 0);//s
     	sosGame.getPlayerTwo().setPlayerLetter("O");
-    	sosGame.makeMove(0, 0);//o
     	sosGame.makeMove(0, 0);//s
+    	sosGame.makeMove(0, 1);//o
+    	sosGame.makeMove(0, 2);//s
     	
-    	assertEquals("PLAYERONE_WON", sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
+    	assertEquals(GameState.PLAYERONE_WON, sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
     	
     }
     
