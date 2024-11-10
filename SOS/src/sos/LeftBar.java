@@ -8,10 +8,13 @@ import javax.swing.JRadioButton;
 public class LeftBar extends JPanel{
 	public JLabel PlayerOneLabel;
 	public ButtonGroup radio;
+	public ButtonGroup radio2;
 	public JRadioButton S;
 	public JRadioButton O;
 	public JLabel PlayerOnePoints;
 	public JLabel ActualPoints;
+	public JRadioButton Human;
+	public JRadioButton Computer;
 	
 	/**
 	 * Sets up and initializes player 1's panel.
@@ -27,10 +30,17 @@ public class LeftBar extends JPanel{
 		radio = new ButtonGroup();
 		S = new JRadioButton("S");
 		O = new JRadioButton("O");
+		radio2 = new ButtonGroup();
+		Human = new JRadioButton("Human");
+		Computer = new JRadioButton("Computer");
 		radio.add(S);
 		radio.add(O);
+		radio2.add(Human);
+		radio2.add(Computer);
 		this.add(S);
 		this.add(O);
+		this.add(Human);
+		this.add(Computer);
 		
 	}
 
@@ -118,4 +128,30 @@ public class LeftBar extends JPanel{
 	public void setPlayerOneActualPoints(JLabel actualPoints) {
 		ActualPoints = actualPoints;
 	}
+
+	public ButtonGroup getRadio2() {
+		return radio2;
+	}
+
+	public void setRadio2(ButtonGroup radio2) {
+		this.radio2 = radio2;
+	}
+
+	public JRadioButton getHuman() {
+		return Human;
+	}
+
+	public void setHuman(JRadioButton human) {
+		Human = human;
+	}
+
+	public JRadioButton getComputer() {
+		return Computer;
+	}
+
+	public void setComputer(JRadioButton computer) {
+		Computer = computer;
+	}
+	
+	
 }

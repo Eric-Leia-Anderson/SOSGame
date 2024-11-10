@@ -13,7 +13,7 @@ import sos.SOSGame.Colors;
 import sos.SOSGame.GameRules;
 import sos.SOSGame.GameState;
 
-public class SimpleGameRules extends SOSGame{
+public class SimpleGameRules extends SOSGame {
 	
 	/**
 	 * Calls SOSGame constructor and sets rules to simple.
@@ -44,12 +44,19 @@ public class SimpleGameRules extends SOSGame{
 			
 			grid[row][column] = token;
 			checkSOS(color, token);
+			if(isPlayerComputer()) {
+				sosGui.repaint();
+			}
 			if (getFoundSOSSize() > 0)
 			{
+				playerOne.stop();
+				playerTwo.stop();
 				updateGameState((turn == '1' ? GameState.PLAYERONE_WON : GameState.PLAYERTWO_WON));
 			}
 			else if(isBoardFull())
 			{
+				playerOne.stop();
+				playerTwo.stop();
 				updateGameState(GameState.DRAW);
 			}
 			else {

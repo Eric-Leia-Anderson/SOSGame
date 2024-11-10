@@ -13,8 +13,7 @@ import sos.SOSGame.Colors;
 import sos.SOSGame.GameRules;
 import sos.SOSGame.GameState;
 
-public class GeneralGameRules extends SOSGame{
-	
+public class GeneralGameRules extends SOSGame {
 	/**
 	 * Calls SOSGame constructor and sets rules to general.
 	 * */
@@ -45,10 +44,13 @@ public class GeneralGameRules extends SOSGame{
 			grid[row][column] = token;
 			boolean checked = checkSOS(color, token);
 			updatePoints();
-			if(!checked) {
-				turn = (turn == '1') ? '2' : '1';
+			if(isPlayerComputer()) {
+				sosGui.repaint();
+				sosGui.checkPoints();
 			}
 			if(isBoardFull()) {
+				playerOne.stop();
+				playerTwo.stop();
 				if(playerOne.getPlayerPoints() > playerTwo.getPlayerPoints()) {
 					updateGameState(GameState.PLAYERONE_WON);
 				}
@@ -58,6 +60,9 @@ public class GeneralGameRules extends SOSGame{
 				else {
 					updateGameState(GameState.DRAW);
 				}
+			}
+			if(!checked) {
+				turn = (turn == '1') ? '2' : '1';
 			}
 		} else if(grid[row][column] == Cell.O || grid[row][column] == Cell.S) {
 			String message = "Someone already made a move here, try again. ";

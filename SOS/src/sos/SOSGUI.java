@@ -22,6 +22,7 @@ public class SOSGUI extends JFrame {
 	public static final int CELL_SIZE = 100;
 	public static final int GRID_WIDTH = 8;
 	public static final int GRID_WIDTH_HALF = GRID_WIDTH / 2;
+	public static boolean doneHumanMove = false;
 
 	public static final int CELL_PADDING = CELL_SIZE / 6;
 	public static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
@@ -53,6 +54,7 @@ public class SOSGUI extends JFrame {
 	 * */
 	public SOSGUI(SOSGame game) {
 		this.game = game;
+		game.setSOSGUI(this);
 		setContentPane();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
@@ -71,9 +73,9 @@ public class SOSGUI extends JFrame {
 		gameStatusBar.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 15));
 		gameStatusBar.setBorder(BorderFactory.createEmptyBorder(2, 5, 4, 5));
 		leftPanel = new LeftBar();
-		leftPanel.setSize(50, 350);
+		leftPanel.setSize(50, 750);
 		rightPanel = new RightBar();
-		rightPanel.setSize(50, 350);
+		rightPanel.setSize(50, 750);
 		topPanel = new TopBar();
 		topPanel.setBorder(BorderFactory.createEmptyBorder(2, 5, 4, 5));
 		topPanel.getNum().setText(String.valueOf(game.getTotalRows()));
@@ -82,12 +84,15 @@ public class SOSGUI extends JFrame {
 		contentPane.add(gameBoardCanvas, BorderLayout.CENTER);
 		contentPane.add(gameStatusBar, BorderLayout.PAGE_END);
 		
+		leftPanel.getHuman().setSelected(true);
 		leftPanel.getS().setSelected(true);
 		rightPanel.getS().setSelected(true);
+		rightPanel.getHuman().setSelected(true);
 		
 		contentPane.add(topPanel, BorderLayout.PAGE_START);
 		contentPane.add(leftPanel, BorderLayout.WEST);
 		contentPane.add(rightPanel, BorderLayout.EAST);
+		
 		
 		/**
 		 * Action listener for if player one changes letter.
@@ -162,16 +167,13 @@ public class SOSGUI extends JFrame {
 					}
 					
 				}
-				gameBoardCanvas.paintComponent(getGraphics());
+				
 				changeGameMode();
 				checkPoints();
 				leftPanel.S.setSelected(true);
 				rightPanel.S.setSelected(true);
 				gameBoardCanvas.setPreferredSize(new Dimension(CELL_SIZE * game.getTotalRows(), CELL_SIZE * game.getTotalColumns()));
 				repaint();
-				
-				
-				
 			}
 		});
 	}
@@ -183,14 +185,34 @@ public class SOSGUI extends JFrame {
 		if (topPanel.getSimple().isSelected() && game.getGameRules() == GameRules.GENERAL) {
 				game.updateGameRules(GameRules.SIMPLE);
 				game = new SimpleGameRules();
+				game.setSOSGUI(this);
 		}
 		else if (topPanel.getGeneral().isSelected() && game.getGameRules() == GameRules.SIMPLE){
 				game.updateGameRules(GameRules.GENERAL);
 				game = new GeneralGameRules();
+				game.setSOSGUI(this);
 			}
-		else {
-			game.resetGame();
+		if (leftPanel.getHuman().isSelected()) {
+			game.setPlayerOne(new HumanPlayer(Color.RED, "S", '1', 0, game));
+			game.getPlayerOne().setType('H');
 		}
+		else if (leftPanel.getComputer().isSelected()) {
+			game.setPlayerOne(new AutoPlayer(Color.RED, "S", '1', 0, game, 5000));
+			game.getPlayerOne().setType('C');
+		}
+		if (rightPanel.getHuman().isSelected()) {
+			game.setPlayerTwo(new HumanPlayer(Color.BLUE, "S", '2', 0, game));
+			game.getPlayerTwo().setType('H');
+		}
+		else if (rightPanel.getComputer().isSelected()) {
+			game.setPlayerTwo(new AutoPlayer(Color.BLUE, "S", '2', 0, game, 6000));
+			game.getPlayerTwo().setType('C');
+		}
+		game.initPartialGame();
+	}
+	
+	public void repaintTheBoard() {
+		repaint();
 	}
 
 	class GameBoardCanvas extends JPanel {
@@ -203,10 +225,16 @@ public class SOSGUI extends JFrame {
 			addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent e) {
 					if (game.getGameState() == GameState.PLAYING) {
-						int rowSelected = e.getY() / CELL_SIZE;
-						int colSelected = e.getX() / CELL_SIZE;
-						game.makeMove(rowSelected, colSelected);
-						checkPoints();
+						if (!game.isPlayerComputer()) {
+							int rowSelected = e.getY() / CELL_SIZE;
+							int colSelected = e.getX() / CELL_SIZE;
+							game.makeMove(rowSelected, colSelected);
+							checkPoints();	
+							//game.setDoneHumanMove(true);
+						}
+						else {
+							//checkPoints();
+						}
 					} else {
 						game.resetGame();
 						checkPoints();
@@ -369,6 +397,7 @@ public class SOSGUI extends JFrame {
 	public void checkPoints() {
 		leftPanel.getPlayerOneActualPoints().setText(String.valueOf(game.getPlayerOne().getPlayerPoints()));
 		rightPanel.getPlayerTwoActualPoints().setText(String.valueOf(game.getPlayerTwo().getPlayerPoints()));
+		repaint();
 	}
 
 	/**

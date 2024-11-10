@@ -9,10 +9,15 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import sos.SOSGame.Cell;
+import sos.SOSGame.GameState;
 
 public class SOSGame {
 	protected static int TOTALROWS = 4;
 	protected static int TOTALCOLUMNS = 4;
+	
+	protected SOSGUI sosGui;
+	
+	public static boolean doneHumanMove = false;
 	
 	public enum Cell {
 		EMPTY, S, O
@@ -48,6 +53,10 @@ public class SOSGame {
 		initGame();
 	}
 
+	
+	public void setSOSGUI(SOSGUI sosGui) {
+		this.sosGui = sosGui;
+	}
 	/**
 	 * Initializes cell array, sets default game state to playing,
 	 * creates 2 players with default colors, letter, turns, and points.
@@ -58,13 +67,47 @@ public class SOSGame {
 				grid[row][col] = Cell.EMPTY;
 			}
 		}
+		doneHumanMove = false;
 		currentGameState = GameState.PLAYING;
 		foundSOSs = new ArrayList<FoundSOS>();
-		playerOne = new Player(Color.RED, "S", 1, 0);
-		playerTwo = new Player(Color.BLUE, "S", 2, 0);
+		playerOne = new HumanPlayer(Color.RED, "S", '1', 0, this);
+		playerOne.setType('H');
+		playerTwo = new HumanPlayer(Color.BLUE, "S", '2', 0, this);
+		playerTwo.setType('H');
 		playerOne.setPlayerLetter("S");
 		playerTwo.setPlayerLetter("S");
 		turn = '1';
+		startGame();
+	}
+	
+	public void initPartialGame() {
+		for (int row = 0; row < TOTALROWS; ++row) {
+			for (int col = 0; col < TOTALCOLUMNS; ++col) {
+				grid[row][col] = Cell.EMPTY;
+			}
+		}
+		doneHumanMove = false;
+		currentGameState = GameState.PLAYING;
+		foundSOSs = new ArrayList<FoundSOS>();
+		turn = '1';
+		startGame();
+	}
+	
+	public Cell[][] getGrid() {
+		return grid;
+	}
+	
+	public void startGame() {
+		playerOne.start();
+		playerTwo.start();
+	}
+	
+	public void setDoneHumanMove(boolean done) {
+		doneHumanMove = done;
+	}
+	
+	public boolean getDoneHumanMove() {
+		return doneHumanMove;
 	}
 	
 	/**
@@ -163,6 +206,26 @@ public class SOSGame {
 	 * */
 	public char getTurn() {
 		return turn;
+	}
+	
+	public Player getCurrentPlayer() {
+		return turn == '1' ? playerOne : playerTwo;
+	}
+	
+	public Player getOtherPlayer() {
+		return turn == '1' ? playerTwo : playerOne;
+	}
+	
+	public boolean isPlayerComputer() {
+		boolean comp = false;
+		if (turn == '1') {
+			comp = playerOne.getType() == 'C' ? true : false;
+			
+		}
+		else {
+			comp = playerTwo.getType() == 'C' ? true : false;
+		}
+		return comp;
 	}
 	
 	/**
