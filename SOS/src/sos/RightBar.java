@@ -124,35 +124,51 @@ public class RightBar extends JPanel{
 	}
 
 	/**
-	 * Sets player 2's actual point label.
+	 * Sets player 2's actual points.
 	 * */
 	public void setPlayerTwoActualPoints(JLabel actualPoints) {
 		ActualPoints = actualPoints;
 	}
 
+	/**
+	 * Gets player 2's radio button group 2.
+	 * */
 	public ButtonGroup getRadio2() {
 		return radio2;
 	}
 
+	/**
+	 * Sets player 2's radio button group 2.
+	 * */
 	public void setRadio2(ButtonGroup radio2) {
 		this.radio2 = radio2;
 	}
 
+	/**
+	 * Gets player 2's human button.
+	 * */
 	public JRadioButton getHuman() {
 		return Human;
 	}
 
+	/**
+	 * Sets player 2's human button.
+	 * */
 	public void setHuman(JRadioButton human) {
 		Human = human;
 	}
 
+	/**
+	 * Gets player 2's computer button.
+	 * */
 	public JRadioButton getComputer() {
 		return Computer;
 	}
 
+	/**
+	 * Sets player 2's computer button.
+	 * */
 	public void setComputer(JRadioButton computer) {
 		Computer = computer;
 	}
-	
-	
 }

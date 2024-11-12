@@ -25,13 +25,21 @@ public abstract class Player {
 		playerPoints = points;
 		this.game = game;
 	}
-	//make this abstract
+	/**
+	 * Empty make move.
+	 * */
 	public int[] makeMove(Cell[][] grid) {
 		return null;
 	}
 	
+	/**
+	 * Abstract start.
+	 * */
 	public abstract void start();
 	
+	/**
+	 * Empty make random move.
+	 * */
 	public Point makeRandomMove(Cell[][] grid) {
 		return null;
 	}
@@ -99,9 +107,11 @@ public abstract class Player {
 	public void setType(char type) {
 		this.type = type;
 	}
+	
+	/**
+	 * Abstract stop.
+	 * */
 	protected abstract void stop();
-	
-	
 }
 
 

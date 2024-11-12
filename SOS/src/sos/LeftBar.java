@@ -129,29 +129,45 @@ public class LeftBar extends JPanel{
 		ActualPoints = actualPoints;
 	}
 
+	/**
+	 * Gets player 1's radio group 2.
+	 * */
 	public ButtonGroup getRadio2() {
 		return radio2;
 	}
 
+	/**
+	 * Sets player 1's radio group 2.
+	 * */
 	public void setRadio2(ButtonGroup radio2) {
 		this.radio2 = radio2;
 	}
 
+	/**
+	 * Gets player 1's human radio button.
+	 * */
 	public JRadioButton getHuman() {
 		return Human;
 	}
 
+	/**
+	 * Sets player 1's human radio button.
+	 * */
 	public void setHuman(JRadioButton human) {
 		Human = human;
 	}
 
+	/**
+	 * Gets player 1's computer radio button.
+	 * */
 	public JRadioButton getComputer() {
 		return Computer;
 	}
 
+	/**
+	 * Sets player 1's computer radio button.
+	 * */
 	public void setComputer(JRadioButton computer) {
 		Computer = computer;
 	}
-	
-	
 }

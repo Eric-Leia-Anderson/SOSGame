@@ -17,8 +17,6 @@ public class SOSGame {
 	
 	protected SOSGUI sosGui;
 	
-	public static boolean doneHumanMove = false;
-	
 	public enum Cell {
 		EMPTY, S, O
 	}
@@ -53,7 +51,9 @@ public class SOSGame {
 		initGame();
 	}
 
-	
+	/**
+	 * 
+	 */
 	public void setSOSGUI(SOSGUI sosGui) {
 		this.sosGui = sosGui;
 	}
@@ -67,7 +67,6 @@ public class SOSGame {
 				grid[row][col] = Cell.EMPTY;
 			}
 		}
-		doneHumanMove = false;
 		currentGameState = GameState.PLAYING;
 		foundSOSs = new ArrayList<FoundSOS>();
 		playerOne = new HumanPlayer(Color.RED, "S", '1', 0, this);
@@ -80,34 +79,40 @@ public class SOSGame {
 		startGame();
 	}
 	
+	/**
+	 * Initializes cell array, new players are created elsewhere,
+	 * sets game state to playing, and starts game.
+	 */
 	public void initPartialGame() {
 		for (int row = 0; row < TOTALROWS; ++row) {
 			for (int col = 0; col < TOTALCOLUMNS; ++col) {
 				grid[row][col] = Cell.EMPTY;
 			}
 		}
-		doneHumanMove = false;
 		currentGameState = GameState.PLAYING;
 		foundSOSs = new ArrayList<FoundSOS>();
 		turn = '1';
 		startGame();
 	}
 	
+	/**
+	 * Returns grid of Cells.
+	 */
 	public Cell[][] getGrid() {
 		return grid;
 	}
 	
+	/**
+	 * Calls start method of players. 
+	 */
 	public void startGame() {
 		playerOne.start();
 		playerTwo.start();
 	}
 	
-	public void setDoneHumanMove(boolean done) {
-		doneHumanMove = done;
-	}
-	
-	public boolean getDoneHumanMove() {
-		return doneHumanMove;
+	public void stopPlayers() {
+		playerOne.stop();
+		playerTwo.stop();
 	}
 	
 	/**
@@ -208,14 +213,24 @@ public class SOSGame {
 		return turn;
 	}
 	
+	/**
+	 * Returns current player based on current turn.
+	 */
 	public Player getCurrentPlayer() {
 		return turn == '1' ? playerOne : playerTwo;
 	}
 	
+	
+	/**
+	 * Returns the non current player.
+	 */
 	public Player getOtherPlayer() {
 		return turn == '1' ? playerTwo : playerOne;
 	}
 	
+	/**
+	 * Checks if the current player is a Computer or Human. 
+	 */
 	public boolean isPlayerComputer() {
 		boolean comp = false;
 		if (turn == '1') {
@@ -266,7 +281,7 @@ public class SOSGame {
 	 * 
 	 */
 	public void makeMove(int row, int column) {
-		//empty
+		//empty, abstract?
 	}
 	
 	/**
@@ -361,8 +376,6 @@ public class SOSGame {
             	points.remove(2);
             	points.remove(1);
             }
-            currX -= x[dir];
-            currY -= y[dir];
         }
         return stuff;
 	}

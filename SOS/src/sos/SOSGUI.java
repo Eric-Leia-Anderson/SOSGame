@@ -144,6 +144,7 @@ public class SOSGUI extends JFrame {
 		 * */
 		topPanel.getStartGame().addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
+				game.stopPlayers();
 				if (!validateBoardSize()) {
 					topPanel.getNum().setText("3");
 				}
@@ -179,7 +180,8 @@ public class SOSGUI extends JFrame {
 	}
 	
 	/**
-	 * Changes game rules if new mode is selected and reset/start game is clicked.
+	 * Changes game rules if new mode is selected, creates new players, 
+	 * and reset/start game is clicked.
 	 * */
 	public void changeGameMode() {
 		if (topPanel.getSimple().isSelected() && game.getGameRules() == GameRules.GENERAL) {
@@ -197,7 +199,7 @@ public class SOSGUI extends JFrame {
 			game.getPlayerOne().setType('H');
 		}
 		else if (leftPanel.getComputer().isSelected()) {
-			game.setPlayerOne(new AutoPlayer(Color.RED, "S", '1', 0, game, 5000));
+			game.setPlayerOne(new AutoPlayer(Color.RED, "S", '1', 0, game, 7000));
 			game.getPlayerOne().setType('C');
 		}
 		if (rightPanel.getHuman().isSelected()) {
@@ -205,12 +207,15 @@ public class SOSGUI extends JFrame {
 			game.getPlayerTwo().setType('H');
 		}
 		else if (rightPanel.getComputer().isSelected()) {
-			game.setPlayerTwo(new AutoPlayer(Color.BLUE, "S", '2', 0, game, 6000));
+			game.setPlayerTwo(new AutoPlayer(Color.BLUE, "S", '2', 0, game, 8500));
 			game.getPlayerTwo().setType('C');
 		}
 		game.initPartialGame();
 	}
 	
+	/**
+	 * Repaints the board.
+	 */
 	public void repaintTheBoard() {
 		repaint();
 	}
@@ -230,10 +235,8 @@ public class SOSGUI extends JFrame {
 							int colSelected = e.getX() / CELL_SIZE;
 							game.makeMove(rowSelected, colSelected);
 							checkPoints();	
-							//game.setDoneHumanMove(true);
 						}
 						else {
-							//checkPoints();
 						}
 					} else {
 						game.resetGame();

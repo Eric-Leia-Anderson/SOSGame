@@ -19,10 +19,17 @@ public class AutoPlayer extends Player{
     private int delay;
     private Cell[][] grid;
 
+    /**
+     * Calls Player constructor and sets delay in ms. 
+     */
 	public AutoPlayer(Color color, String letter, char turn, int points, SOSGame game, int delay) {
 		super(color, letter, turn, points, game);
 		this.delay = delay;
 	}
+	
+	/**
+	 * Timer that checks between delays if it should make a move. 
+	 */
 	@Override
     public void start() {
         timer = new Timer(delay, new ActionListener() {
@@ -34,27 +41,30 @@ public class AutoPlayer extends Player{
         timer.start();
     }
 
+	/**
+	 * Checks that current turn is this player's turn
+	 * and makes move. 
+	 */
     private void makeMove() {
     	if(game.getTurn() == playerTurn) {
     		autoPlay();
     	}
     }
     
+    /**
+	 * Stops the timer so that player doens't continue.
+	 */
     @Override
     public void stop() {
         if (timer != null) {
             timer.stop();
         }
     }
-	
-	public void startPlaying() {
-		while(game.currentGameState == GameState.PLAYING) {
-			if(game.getTurn() == playerTurn) {
-				autoPlay();
-			}
-		}
-	}
 
+    /**
+	 * Checks for SOS to complete in grid.
+	 * If it can't find an SOS to complete, it finds a random empty space. 
+	 */
 	public void autoPlay() {
 				int[] autoMove = makeMove(game.grid);
 				if(autoMove[0] != -1 && autoMove[1] != -1 && autoMove[2] != -1) {
@@ -82,26 +92,19 @@ public class AutoPlayer extends Player{
 			}
 	}
 
+	/**
+	 * Checks for SOS in forms: SXS, XOS, and SOX.
+	 */
 	@Override
 	public int[] makeMove(Cell[][] grid) {
 		int[] move = new int[] {-1, -1, -1};
 		Cell[] tokens = new Cell[] {Cell.S, Cell.EMPTY, Cell.S};
 		Cell[] tokens2 = new Cell[] {Cell.EMPTY, Cell.O, Cell.S};
 		Cell[] tokens3 = new Cell[] {Cell.S, Cell.O, Cell.EMPTY};
-		Cell[] tokens4 = new Cell[] {Cell.EMPTY, Cell.O, Cell.EMPTY};
-		Cell[] tokens5 = new Cell[] {Cell.S, Cell.EMPTY, Cell.EMPTY};
-		Cell[] tokens6 = new Cell[] {Cell.EMPTY, Cell.EMPTY, Cell.S};
         List<Point> points = new ArrayList<Point>();
         List<FoundSOS> found = new ArrayList<FoundSOS>();
-        FoundSOS sosFound;
         int m = grid.length;
-        int n = grid[0].length;
-        boolean foundMove = false;
-        Random rand = new Random();
-		int check;
-		//boolean skip = false; 
-		check = rand.nextInt(10);
-        
+        int n = grid[0].length;     
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
@@ -114,7 +117,6 @@ public class AutoPlayer extends Player{
             				move[0] = p.x;
             				move[1] = p.y;
             				move[2] = 1;//1 means O, 0 means S
-            				foundMove = true;
             				return move;
             			}
             		}
@@ -133,7 +135,6 @@ public class AutoPlayer extends Player{
             				move[0] = p.x;
             				move[1] = p.y;
             				move[2] = 0;//1 means O, 0 means S
-            				foundMove = true;
             				return move;
             			}
             		}
@@ -152,56 +153,17 @@ public class AutoPlayer extends Player{
             				move[0] = p.x;
             				move[1] = p.y;
             				move[2] = 0;//1 means O, 0 means S
-            				foundMove = true;
             				return move;
             			}
             		}
             	}
             }
         }
-        
-//        for (int i = 0; i < m; i++) {
-//            for (int j = 0; j < n; j++) {
-//            	found = findMove(grid, i, j, tokens4);
-//            	if(found.size() > 0) {
-//            		for(FoundSOS fs : found) {
-//            			points = fs.getCoordinates();
-//            			if(points.size() == 3) {
-//            				Point p = points.get(0);
-//            				move[0] = p.x;
-//            				move[1] = p.y;
-//            				move[2] = 0;//1 means O, 0 means S
-//            				foundMove = true;
-//            				return move;
-//            			}
-//            		}
-//            	}
-//            }
-//        }
-        
-//        for (int i = 0; i < m; i++) {
-//            for (int j = 0; j < n; j++) {
-//            	found = findMove(grid, i, j, tokens5);
-//            	if(found.size() > 0) {
-//            		for(FoundSOS fs : found) {
-//            			points = fs.getCoordinates();
-//            			if(points.size() == 3) {
-//            				Point p = points.get(1);
-//            				move[0] = p.x;
-//            				move[1] = p.y;
-//            				move[2] = 0;//1 means O, 0 means S
-//            				foundMove = true;
-//            				return move;
-//            			}
-//            		}
-//            	}
-//            }
-//        }
         return move;
 	}
 	
 	/**
-	 * Finds any SOS's on board, checks if it was already found, and returns the list. 
+	 * Finds any SOS's on board, and returns the list. 
 	 * */
 	public List<FoundSOS> findMove(Cell[][] grid, int row, int col, Cell[] tokens) {
 		int m = grid.length;
@@ -247,12 +209,13 @@ public class AutoPlayer extends Player{
             	points.remove(2);
             	points.remove(1);
             }
-            currX -= x[dir];
-            currY -= y[dir];
         }
         return stuff;
 	}
 	
+	/**
+	 * Find empty spaces, skip randomly so it's not all in a row.
+	 */
 	@Override
 	public Point makeRandomMove(Cell[][] grid) {
 		Point point = null;

@@ -94,7 +94,7 @@ public class SOSGUITest {
     	sosGame.makeMove(0, 1);//o
     	sosGame.makeMove(0, 2);//s
     	
-    	assertEquals(GameState.PLAYERONE_WON, sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
+    	assertEquals("PLAYERONE_WON", sosGame.getGameState(), "Current game state should be PLAYERONE_WON");
     	
     }
     
@@ -140,6 +140,5 @@ public class SOSGUITest {
             }
         }
         assertEquals(GameState.DRAW, sosGame.getGameState(), "Current game state should be DRAW");
-        
     }
 }
